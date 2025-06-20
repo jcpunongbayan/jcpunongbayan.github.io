@@ -4,7 +4,7 @@ collection: publications
 category: journals
 permalink: /publication/2025_ael
 excerpt: 'This paper is about the number 1. The number 2 is left for future work.'
-date: 2025
+date: 2025-03-31
 venue: 'Applied Economics Letters'
 slidesurl: # 'http://academicpages.github.io/files/slides1.pdf'
 paperurl: 'https://www.tandfonline.com/doi/full/10.1080/13504851.2025.2487241'
