@@ -26,12 +26,8 @@ author:
   name             : "JC Punongbayan"
   pronouns         : "he/him"  
   bio              : "Filipino economist and academic."
-  location         : |
-			"Diliman, Quezon City,"
-			"Philippines"
-  employer         : |
-			"University of the Philippines"
-			"School of Economics"
+  location         : "Quezon City, Philippines"
+  employer         : "UP School of Economics"
   uri              : # URL
   email            : "jbpunongbayan@up.edu.ph" 
 
