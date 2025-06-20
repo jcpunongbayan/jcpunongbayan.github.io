@@ -11,8 +11,8 @@ locale                   : "en-US"
 site_theme               : "default"
 title                    : "JC Punongbayan"
 title_separator          : "-"
-name                     : &name "JC Punongbayan"
-description              : &description "personal description"
+name                     : "JC Punongbayan"
+description              : "Official site of JC Punongbayan, economist, professor, and writer."
 url                      : https://jcpunongbayan.github.io # the base hostname & protocol for your site e.g. "https://jcpunongbayan.github.io" or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "jcpunongbayan/jcpunongbayan.github.io"
@@ -79,11 +79,15 @@ author:
 # Publication Category - The following the list of publication categories and their headings
 publication_category:
   journals:
-    title: 'Journal Articles'  
+    title: 'Journal articles'  
   books:
     title: 'Books' 
-  bookchapters:
+  chapters:
     title: 'Book chapters' 
+  dps:
+    title: 'Discussion papers'
+  notes:
+    title: 'Policy notes and briefs'
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
@@ -149,7 +153,7 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "false" # false (default), "google", "google-universal", "google-analytics-4", "custom"
+  provider               :  "google-analytics-4" # false (default), "google", "google-universal", "google-analytics-4", "custom"
   google:
     tracking_id          :
 
