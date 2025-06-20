@@ -33,29 +33,29 @@
   "work": [],
   "education": [
     {
-      "institution": "GitHub University",
-      "area": "Ph.D in Version Control Theory",
+      "institution": "UP School of Economics",
+      "area": "Ph.D in Economics",
       "studyType": "",
-      "startDate": "",
-      "endDate": "2018",
+      "startDate": "2015",
+      "endDate": "2021",
       "gpa": null,
       "courses": []
     },
     {
-      "institution": "GitHub University",
-      "area": "M.S. in Jekyll",
+      "institution": "UP School of Economics",
+      "area": "M.A. in Economics",
       "studyType": "",
-      "startDate": "",
-      "endDate": "2014",
+      "startDate": "2011",
+      "endDate": "2013",
       "gpa": null,
       "courses": []
     },
     {
-      "institution": "GitHub University",
-      "area": "B.S. in GitHub",
+      "institution": "UP School of Economics",
+      "area": "B.S. in Economics",
       "studyType": "",
-      "startDate": "",
-      "endDate": "2012",
+      "startDate": "2005",
+      "endDate": "2009",
       "gpa": null,
       "courses": []
     }
