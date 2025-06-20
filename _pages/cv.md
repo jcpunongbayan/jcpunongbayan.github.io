@@ -17,10 +17,10 @@ Education
 
 Work experience
 ======
-* Spring 2024: Academic Pages Collaborator
-  * GitHub University
-  * Duties includes: Updates and improvements to template
-  * Supervisor: The Users
+* 2012-2013: Economist, Securities and Exchange Commission
+* 2013-2014: Consultant, World Bank office in Manila
+* 2014-2015: Head Executive Assistant, National Economic and Development Authority
+* 2018-2019: Research Coordinator, FEU Public Policy Center
   
 Skills
 ======
