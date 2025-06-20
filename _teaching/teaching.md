@@ -1,11 +1,8 @@
 ---
-title: "Undergraduate teaching"
-collection: teaching
-type: #
-permalink: /teaching/undergraduate
-venue: "UP School of Economics"
-date: #
-location: #
+layout: single
+title: "Teaching"
+permalink: /teaching/
+author_profile: true
 ---
 
 * Econ 100.1 - Introduction to Macroeconomic Theory and Policy
