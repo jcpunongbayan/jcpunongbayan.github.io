@@ -1,7 +1,7 @@
 ---
 layout: archive
-title: "Commentaries"
-permalink: /commentaries/
+title: "Commentary"
+permalink: /commentary/
 author_profile: true
 ---
 
