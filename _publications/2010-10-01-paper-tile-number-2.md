@@ -1,7 +1,7 @@
 ---
 title: "Supply and demand components of Philippine inflation (2001-2024)"
 collection: publications
-category: journals
+category: manuscripts
 permalink: /publications/2025_ael
 excerpt: #
 date: 2025-03-31
