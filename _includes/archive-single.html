@@ -80,7 +80,10 @@
       <p><a href="{{ post.bibtexurl }}">Download Bibtex</a></p>
     {% endif %}
 
-    {{ post.content | markdownify }}
+  {% if page.url == post.url %}
+  {{ post.content | markdownify }}
+  {% endif %}
+   
 
 
   </article>
