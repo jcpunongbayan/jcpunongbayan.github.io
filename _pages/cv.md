@@ -19,14 +19,18 @@ Education
 
 Work experience
 ------
-* 2012-2013: Economist, Securities and Exchange Commission
-* 2013-2014: Consultant, World Bank office in Manila
-* 2014-2015: Head Executive Assistant, National Economic and Development Authority
+* 2022-present: Assistant Professor, UP School of Economics
+* 2013-2021: Teaching Fellow, UP School of Economics
 * 2018-2019: Research Coordinator, FEU Public Policy Center
+* 2014-2015: Head Executive Assistant, National Economic and Development Authority
+* 2013-2014: Consultant, World Bank office in Manila
+* 2012-2013: Economist, Securities and Exchange Commission
+* 2011: Junior Research Assistant, Institute to Study Inequality, Poverty, and Social Protection
   
 Skills
 ------
 * Quantitative analysis (econometrics, causal inference)
+* Research project management (e.g., Philippine Microfinance Survey)
 * Software: Stata, Python, R
 
 Publications
@@ -41,3 +45,4 @@ Service and leadership
 * Member, UP Admissions Evaluation Committee
 * Fellow, Social Weather Stations (SWS)
 * Board Member, INCITEGov
+* Founder, Usapang Econ
