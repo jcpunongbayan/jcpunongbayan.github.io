@@ -39,10 +39,14 @@ Publications
     {% include archive-single-cv.html %}
   {% endfor %}</ul>
   
+Fellowships
+------
+* Research Fellow, Ateneo-EDCOM II; [edcom2.gov.ph](https://edcom2.gov.ph/ateneo-and-edcom-2-join-forces-names-16-distinguished-fellows-for-education-policy-research/) 
+* Fellow, Social Weather Stations (SWS)
+
 Service and leadership
 ------
 * Associate Editor, <em>Social Science Diliman</em>
 * Member, UP Admissions Evaluation Committee
-* Fellow, Social Weather Stations (SWS)
 * Board Member, INCITEGov
 * Founder, Usapang Econ
