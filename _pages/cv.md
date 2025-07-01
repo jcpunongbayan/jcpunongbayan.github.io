@@ -7,7 +7,7 @@ redirect_from:
   - /resume
 ---
 
-You can download JC's latest CV (PDF) [here](/files/jcp_acadcv.pdf).
+You can download JC's full CV (PDF) [here](/files/jcp_acadcv.pdf).
 
 {% include base_path %}
 
@@ -41,12 +41,14 @@ Publications
   
 Fellowships
 ------
+* Former Visiting Fellow, Philippine Studies Programme, ISEAS-Yusof Ishak Institute
 * Research Fellow, Ateneo-EDCOM II; [edcom2.gov.ph](https://edcom2.gov.ph/ateneo-and-edcom-2-join-forces-names-16-distinguished-fellows-for-education-policy-research/) 
+* Research Fellow, GRIT Labs
 * Fellow, Social Weather Stations (SWS)
 
 Service and leadership
 ------
 * Associate Editor, <em>Social Science Diliman</em>
 * Member, UP Admissions Evaluation Committee
-* Board Member, INCITEGov
-* Founder, Usapang Econ
+* Member and Trustee, INCITEGov
+* Co-Founder, Usapang Econ
