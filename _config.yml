@@ -9,9 +9,9 @@
 # Basic Site Settings
 locale                   : "en-US"
 site_theme               : "default"
-title                    : "JC Punongbayan | Personal Website"
+title                    : "JC Punongbayan"
 title_separator          : "-"
-name                     : 
+name                     : ""
 description              : "Official website of JC Punongbayan: economist, professor, and writer."
 url                      : "https://jcpunongbayan.com" # the base hostname & protocol for your site e.g. "https://jcpunongbayan.github.io" or if you already have some other page hosted on Github then use "https://[your GitHub username].github.io/[Your Repo Name]"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
