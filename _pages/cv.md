@@ -15,7 +15,7 @@ Education
 ------
 * Ph.D. in Economics, UP School of Economics, 2015-2021
 * M.S. in Economics, UP School of Economics, 2011-2013
-* B.S. in Economics, UP School of Economics, 2005-2009, summa cum laude
+* B.S. in Economics, UP School of Economics, 2005-2009, <em>summa cum laude</em>
 
 Work experience
 ------
