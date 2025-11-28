@@ -9,7 +9,7 @@ redirect_from:
 
 About
 ------
-I am an Assistant Professor at the [University of the Philippines School of Economics](https://econ.upd.edu.ph/) or UPSE. I was also a Visiting Fellow of the ISEAS-Yusof Ishak Institute in Singapore.
+I am an Assistant Professor at the [University of the Philippines School of Economics](https://econ.upd.edu.ph/) or UPSE. I'm also a Visiting Fellow of the ISEAS-Yusof Ishak Institute in Singapore.
 
 I earned my PhD in Economics from UPSE in 2021, where I also graduated <em>summa cum laude</em> in 2009 (BS Economics) and received the José Encarnación Jr. Award for Excellence in Economics and the Gerardo P. Sicat Award for Best Undergraduate Thesis.
 
