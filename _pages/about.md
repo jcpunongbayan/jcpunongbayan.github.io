@@ -19,7 +19,9 @@ Apart from my academic work, I’m also a columnist for the online news site [Ra
 
 In 2023, my first book, <em>False Nostalgia: The Marcos “Golden Age” Myths and How to Debunk Them</em>, was published by Ateneo de Manila University Press. In 2024, it was awarded the Inkwell of Change Award by Paragala: The Central Luzon Media Awards. <em>False Nostalgia</em> is available at the Ateneo Press Bookstore, Fully Booked (select branches), and online on [Lazada](https://www.lazada.com.ph/products/false-nostalgia-the-marcos-golden-age-myths-and-how-to-debunk-them-i3601422423.html), [Shopee](https://shopee.ph/False-Nostalgia-The-Marcos-%E2%80%9CGolden-Age%E2%80%9D-Myths-and-How-to-Debunk-Them-i.75162109.18174084249), and [Amazon](https://www.amazon.co.uk/False-Nostalgia-Marcos-Golden-Debunk-ebook/dp/B0C891CPGF).
 
-In 2024, I was awarded The Outstanding Young Men (TOYM) Award by JCI Philippines and the TOYM Foundation for my work in economics.
+My second book, <em>Twin Plagues: How Duterte and Covid-19 Wrecked the Philippine Economy</em>, will be published by Penguin Random House Southeast Asia on 30 June 2026.
+
+In 2024, was awarded The Outstanding Young Men (TOYM) Award by JCI Philippines and the TOYM Foundation for my work in economics.
 
 Research interests
 ------
