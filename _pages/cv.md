@@ -19,7 +19,8 @@ Education
 
 Work experience
 ------
-* 2022–present: Assistant Professor, UP School of Economics
+* 2026–present: Associate Professor, UP School of Economics
+* 2022–2026: Assistant Professor, UP School of Economics
 * 2013–2021: Teaching Fellow, UP School of Economics
 * 2018–2019: Research Coordinator, FEU Public Policy Center
 * 2016–present: Columnist, Rappler.com
