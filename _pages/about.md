@@ -9,7 +9,7 @@ redirect_from:
 
 About
 ------
-I am an Associate Professor at the [University of the Philippines School of Economics](https://econ.upd.edu.ph/) or UPSE. I'm also a former Visiting Fellow of the ISEAS–Yusof Ishak Institute in Singapore.
+Hi! I'm an Associate Professor at the [University of the Philippines School of Economics](https://econ.upd.edu.ph/) (UPSE) and a former Visiting Fellow of the ISEAS–Yusof Ishak Institute in Singapore.
 
 I earned my PhD in Economics from UPSE in 2021, where I also graduated <em>summa cum laude</em> in 2009 (BS Economics) and received the José Encarnación Jr. Award for Excellence in Economics and the Gerardo P. Sicat Award for Best Undergraduate Thesis.
 
@@ -21,11 +21,12 @@ In 2023, my first book, <em>False Nostalgia: The Marcos “Golden Age” Myths a
 
 My second book, <em>Twin Plagues: How Duterte and Covid-19 Wrecked the Philippine Economy</em>, will be published by Penguin Random House Southeast Asia on 30 June 2026.
 
-In 2024, was awarded The Outstanding Young Men (TOYM) Award by JCI Philippines and the TOYM Foundation for my work in economics.
+In 2024, I was awarded The Outstanding Young Men (TOYM) Award by JCI Philippines and the TOYM Foundation for my work in economics.
 
 Research interests
 ------
 * Education economics
+* Market design
 * Macroeconomics
 * Development economics
 * Philippine economic history
