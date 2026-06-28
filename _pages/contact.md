@@ -5,13 +5,6 @@ permalink: /contact/
 author_profile: true
 ---
 
-{% include base_path %}
+For research inquiries, consultancy requests, speaking invitations, media interviews, or other professional matters, please email me at jbpunongbayan@up.edu.ph.
 
-Contact
-------
-For research inquiries, consultancy requests, speaking invitations, media interviews, or other professional matters, please email me at [jbpunongbayan@up.edu.ph](mailto:jbpunongbayan@up.edu.ph).
-
-You may also reach me through my secretary, Ms. Sheila Mae C. Flores, at [scflores@up.edu.ph](mailto:scflores@up.edu.ph).
-
-Telephone: (632) 8920-5460  
-Trunkline: 8981-85-00 local 3482
+You may also reach me via my secretary, Ms. Sheila Mae C. Flores, with the following contact details. Email: scflores@up.edu.ph. Phone number: (632) 8920-5460; trunkline: 8981-85-00 local 3482.
