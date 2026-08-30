@@ -1,6 +1,7 @@
 ---
 permalink: /
 title: "JC Punongbayan"
+seo_title: "JC Punongbayan - Economist, Professor, Columnist"
 author_profile: true
 redirect_from: 
   - /about/
