@@ -7,6 +7,10 @@ author_profile: true
 
 {% include base_path %}
 
+Graduate
+------
+* Econ 201 (Macroeconomic Theory I)
+
 Undergraduate
 ------
 * Econ 100.1 (Introduction to Macroeconomic Theory and Policy)
