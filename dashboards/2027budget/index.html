@@ -118,9 +118,6 @@ svg{display:block}
 }
 @media print{.step{display:none}}
 
-
-
-
 .wrap{width:min(var(--wrap),calc(100% - 44px));margin-inline:auto}
 
 /* ---- hero ---- */
@@ -345,15 +342,6 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   .step svg{width:18px;height:18px}
 }
 @media (max-width:760px){
-  /* the editing toolbar gets the same translucent treatment as the stepper */
-  .edit{right:12px;bottom:74px;align-items:flex-end}
-  .edit__row{
-    background:color-mix(in srgb,var(--panel) 82%,transparent);
-    border:1px solid var(--rule-soft);border-radius:5px;padding:5px;gap:5px;
-    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  }
-  .edit button{box-shadow:none;border-color:transparent;background:transparent;padding:8px 10px;font-size:.6rem}
-  .edit .hint{max-width:190px;font-size:.58rem}
   .step{
     display:flex;flex-direction:row;gap:6px;right:12px;bottom:12px;
     background:color-mix(in srgb,var(--panel) 82%,transparent);
@@ -404,6 +392,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
 
 :focus-visible{outline:2px solid var(--gaa);outline-offset:3px}
 </style>
+
+
 
 <div class="prog" aria-hidden="true"><i></i></div>
 <div class="spine" aria-hidden="true"></div>
@@ -476,7 +466,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
       <div class="folio__head">
         <span class="tag tag--num">02 · Composition</span>
         <span class="tag tag--src">The 2027 proposal</span>
-        <h2>About two-fifths of the proposal&nbsp;<div>can't be touched by Congress</div></h2>
+        <h2>About two-fifths of the budget&nbsp;<div>can't be touched by Congress</div></h2>
       </div>
       <div class="folio__grid">
         <div>
@@ -821,7 +811,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
       </div>
       <div class="folio__grid" style="grid-template-columns:1fr">
         <div class="say" style="max-width:78ch">
-          <p class="lede">Every budget figure on this page comes from the government's own documents. That means the President's proposal and the budget law as signed, for each year from 2023 to 2027, plus the separate volumes covering the standby list. The economic figures in section 2 come from the Philippine Statistics Authority for 2023 to 2025 and from the government's own projections for 2026 and 2027.</p>
+          <p class="lede">Every budget figure on this page comes from the government's own documents. That means the President's proposal and the budget law as signed, for each year from 2023 to 2027, plus the separate volumes covering the standby list. The economic statistics in section 2 come from the Philippine Statistics Authority for 2023 to 2025 and from the government's own projections for 2026 and 2027.</p>
           <div class="cols">
             <div>
               <h3>Three limits worth stating</h3>
@@ -844,7 +834,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           </div>
           <div class="sig">
             <span><a href="/dashboards">All dashboards</a></span>
-            <span>Prepared by JC PUNONGBAYAN using Claude OPUS 5</span>
+            <span>Prepared by JC PUNONGBAYAN using Claude OPUS 5 and chatgpt 5.6</span>
             <span>Data: Department of Budget and Management, FY 2023 to 2027</span>
             <span>Amounts in billion pesos unless stated</span>
           </div>
