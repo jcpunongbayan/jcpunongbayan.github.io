@@ -215,8 +215,8 @@ h2 em{font-style:italic;color:var(--gaa)}
 }
 .stat dd{margin:0;font-size:.86rem;color:var(--muted);line-height:1.35}
 
-.chart{background:var(--panel-2);border:1px solid var(--rule-soft);border-radius:3px;padding:18px 16px 12px;overflow-x:auto}
-.chart svg{width:100%;height:auto;min-width:340px}
+.chart{background:var(--panel-2);border:1px solid var(--rule-soft);border-radius:3px;padding:18px 16px 12px;overflow:hidden}
+.chart svg{display:block;width:100%;max-width:100%;height:auto;min-width:0}
 .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 14px;padding:0 2px}
 .legend span{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .legend i{width:11px;height:11px;border-radius:1px;display:inline-block}
@@ -288,30 +288,14 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
 }
 /* ================= responsive tuning ================= */
 
-/* Charts are drawn on a fixed 760-unit canvas. Squeezed into a phone column
-   they shrink to about 45%, which puts axis labels near 5px. Below 760px we
-   stop the shrink and let each chart scroll sideways instead, with a shadow
-   at the edges so it is obvious there is more to see. */
+/* Charts redraw to the width of their container. Mobile spacing is tighter,
+   but the SVG never becomes wider than the card. */
 @media (max-width:760px){
-  .chart{
-    padding:16px 14px 10px;
-    -webkit-overflow-scrolling:touch;
-    overscroll-behavior-x:contain;
-    background-image:
-      linear-gradient(to right,var(--panel-2) 40%,transparent),
-      linear-gradient(to left, var(--panel-2) 40%,transparent),
-      linear-gradient(to right,var(--edge),transparent 12px),
-      linear-gradient(to left, var(--edge),transparent 12px);
-    background-repeat:no-repeat;
-    background-size:26px 100%,26px 100%,12px 100%,12px 100%;
-    background-position:left center,right center,left center,right center;
-    background-attachment:local,local,scroll,scroll;
-  }
-  .chart svg{min-width:580px}
-  .t-lab{font-size:16px}
-  .t-val{font-size:15px}
-  .t-ax{font-size:14px}
-  .t-note{font-size:14.5px}
+  .chart{padding:15px 12px 10px}
+  .t-lab{font-size:13px}
+  .t-val{font-size:11.5px}
+  .t-ax{font-size:10.5px;letter-spacing:.02em}
+  .t-note{font-size:11.5px}
 
   /* the closing glossary was holding two columns inside 138px each */
   .cols{grid-template-columns:1fr;gap:30px}
@@ -853,13 +837,20 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
   const txt=(s,a={})=>{const t=el("text",a);t.textContent=s;return t;};
   const fmt=(v,d=1)=>v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+  const chartW=host=>{
+    const cs=getComputedStyle(host);
+    const w=host.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    return Math.max(230,Math.floor(w));
+  };
 
   /* ---------- unit grid: one square per billion ---------- */
   function unitGrid(id,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const cols=opt.cols||120, rows=opt.rows||60;
-    const cell=opt.cell||4.6, gap=opt.gap||1.7, pitch=cell+gap;
-    const W=760, top=36, left=(W-(cols*pitch-gap))/2;
+    const W=chartW(host), mobile=W<520;
+    const cols=opt.cols||(mobile?60:120), rows=7200/cols;
+    const pitch=(W-(mobile?8:16))/cols;
+    const gap=Math.max(.7,pitch*.24), cell=Math.max(1.8,pitch-gap);
+    const top=36, left=(W-(cols*pitch-gap))/2;
     const H=top+rows*pitch-gap+30;
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     /* 7,200 squares as one path — one node instead of seven thousand */
@@ -887,18 +878,23 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- horizontal ranked bars ---------- */
   function hbars(id,rows,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const labW=opt.labW||168, valW=opt.valW||86, rh=opt.rh||27, gap=6, pad=8;
-    const W=760, H=pad*2+rows.length*rh;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?4:(opt.labW||Math.min(168,W*.27));
+    const valW=mobile?48:Math.min(86,W*.14), rh=mobile?44:(opt.rh||27), gap=mobile?18:6, pad=8;
+    const H=pad*2+rows.length*rh;
     const x0=labW, x1=W-valW, max=Math.max(...rows.map(r=>r.v));
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     rows.forEach((r,i)=>{
       const y=pad+i*rh, bh=rh-gap;
-      s.appendChild(txt(r.l,{x:labW-12,y:y+bh/2+4,"text-anchor":"end",class:"t-lab"}));
+      s.appendChild(txt(r.l,mobile
+        ?{x:x0,y:y+12,class:"t-lab"}
+        :{x:labW-12,y:y+bh/2+4,"text-anchor":"end",class:"t-lab"}));
+      const by=mobile?y+18:y;
       const w=Math.max(1,(r.v/max)*(x1-x0));
-      const b=el("rect",{x:x0,y:y,width:w,height:bh,rx:1,fill:r.c||GAA,class:"bar-grow"});
+      const b=el("rect",{x:x0,y:by,width:w,height:bh,rx:1,fill:r.c||GAA,class:"bar-grow"});
       b.style.transitionDelay=(i*0.045)+"s";
       s.appendChild(b);
-      s.appendChild(txt(fmt(r.v,r.d===undefined?1:r.d)+(r.sfx||""),{x:x0+w+9,y:y+bh/2+4,class:"t-val"+(r.hi?" hi":"")}));
+      s.appendChild(txt(fmt(r.v,r.d===undefined?1:r.d)+(r.sfx||""),{x:Math.min(W-2,x0+w+7),y:by+bh/2+4,class:"t-val"+(r.hi?" hi":""),"text-anchor":x0+w+46>W?"end":"start"}));
     });
     host.appendChild(s);
   }
@@ -906,18 +902,21 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- diverging paired bars ---------- */
   function dbars(id,rows){
     const host=document.getElementById(id); if(!host) return;
-    const labW=200, rh=44, pad=12, W=760;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?0:Math.min(200,W*.3), rh=mobile?68:44, pad=12;
     const H=pad*2+rows.length*rh;
-    const x0=labW, x1=W-56, mid=x0+(x1-x0)*0.42;
+    const x0=mobile?42:labW, x1=W-(mobile?42:56), mid=x0+(x1-x0)*(mobile?.5:.42);
     const max=Math.max(...rows.flatMap(r=>[Math.abs(r.a),Math.abs(r.b)]));
     const sc=v=>(v/max)*Math.min(mid-x0,x1-mid);
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     s.appendChild(el("line",{x1:mid,y1:pad-4,x2:mid,y2:H-pad+4,class:"zero-l"}));
     rows.forEach((r,i)=>{
       const y=pad+i*rh;
-      s.appendChild(txt(r.l,{x:labW-14,y:y+rh/2+1,"text-anchor":"end",class:"t-lab"}));
+      s.appendChild(txt(r.l,mobile
+        ?{x:2,y:y+12,class:"t-lab"}
+        :{x:labW-14,y:y+rh/2+1,"text-anchor":"end",class:"t-lab"}));
       [[r.a,GAA,-1],[r.b,NEP,1]].forEach(([v,c,k])=>{
-        const yy=y+rh/2+k*9-8, w=Math.abs(sc(v));
+        const yy=(mobile?y+35:y+rh/2)+k*9-8, w=Math.abs(sc(v));
         if(Math.abs(v)<0.02){
           s.appendChild(txt("no change",{x:mid+6,y:yy+11,class:"t-note"}));return;
         }
@@ -935,9 +934,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- columns ---------- */
   function cols(id,rows,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const W=760, plotH=opt.h||230, padL=8, padR=8, topPad=opt.top||34, botPad=opt.bot||46;
+    const W=chartW(host), mobile=W<520;
+    const plotH=opt.h||230, padL=2, padR=2;
+    const topPad=Math.max(opt.top||34,mobile?(opt.deltas?90:70):0), botPad=Math.max(opt.bot||46,mobile?80:0);
     const H=plotH+topPad+botPad;
-    const n=rows.length, step=(W-padL-padR)/n, bw=Math.min(opt.bw||46,step*0.6);
+    const n=rows.length, step=(W-padL-padR)/n, bw=Math.min(opt.bw||46,step*(mobile?.56:.6));
     const max=Math.max(...rows.map(r=>r.v))*1.02||1;
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     for(let g=0;g<=3;g++){
@@ -950,15 +951,31 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
         const b=el("rect",{x:cx-bw/2,y:y,width:bw,height:h,rx:1,fill:r.c||GAA,class:"col-grow"});
         b.style.transitionDelay=(i*0.05)+"s"; s.appendChild(b);
       }
-      s.appendChild(txt(r.v===0?"0":fmt(r.v,r.d===undefined?1:r.d),{x:cx,y:y-8,"text-anchor":"middle",class:"t-val"+(r.hi?" hi":"")}));
-      String(r.l).split("|").forEach((ln,k)=>
-        s.appendChild(txt(ln,{x:cx,y:topPad+plotH+18+k*13,"text-anchor":"middle",class:"t-ax"})));
-      if(r.note) s.appendChild(txt(r.note,{x:cx,y:topPad+plotH+46,"text-anchor":"middle",class:"t-note"}));
+      let valueY=y-8;
+      if(mobile&&i%2) valueY-=56;
+      s.appendChild(txt(r.v===0?"0":fmt(r.v,r.d===undefined?1:r.d),{x:cx,y:valueY,"text-anchor":"middle",class:"t-val"+(r.hi?" hi":"")}));
+      const parts=String(r.l).split("|");
+      if(!mobile){
+        parts.forEach((ln,k)=>s.appendChild(txt(ln,{x:cx,y:topPad+plotH+18+k*13,"text-anchor":"middle",class:"t-ax"})));
+      }
+      if(r.note){
+        const noteX=mobile&&i===n-1?W-2:cx;
+        s.appendChild(txt(r.note,{x:noteX,y:topPad+plotH+54+(mobile&&i%2?14:0),"text-anchor":mobile&&i===n-1?"end":"middle",class:"t-note"}));
+      }
     });
+    if(mobile){
+      const years=new Map();
+      rows.forEach((r,i)=>{
+        const year=String(r.l).split("|").find(p=>/^20\d\d$/.test(p));
+        if(year){const xs=years.get(year)||[];xs.push(padL+step*(i+.5));years.set(year,xs);}
+      });
+      years.forEach((xs,year)=>s.appendChild(txt(year,{x:xs.reduce((a,b)=>a+b,0)/xs.length,
+        y:topPad+plotH+22,"text-anchor":"middle",class:"t-ax"})));
+    }
     if(opt.deltas){
       opt.deltas.forEach(([i,v])=>{
         const cx=padL+step*(i+0.5)-step/2;
-        s.appendChild(txt("+"+fmt(v,2),{x:cx,y:20,"text-anchor":"middle",class:"t-val hi",fill:"var(--gaa)"}));
+        s.appendChild(txt("+"+fmt(v,mobile?1:2),{x:cx,y:mobile?12:20,"text-anchor":"middle",class:"t-val hi",fill:"var(--gaa)"}));
       });
     }
     host.appendChild(s);
@@ -967,7 +984,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- horizontal grouped bars ---------- */
   function hgrouped(id,groups,series,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const W=760, labW=opt.labW||168, valW=64, bh=13, bgap=5, ggap=24, top=6;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?4:(opt.labW||Math.min(168,W*.27)), valW=mobile?40:64, bh=13, bgap=5, ggap=mobile?36:24, top=6;
     const rowH=series.length*(bh+bgap)+ggap;
     const H=top*2+groups.length*rowH;
     const x0=labW, x1=W-valW;
@@ -977,17 +995,18 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
       const gy=top+gi*rowH;
       const mid=gy+(series.length*(bh+bgap))/2;
       String(g).split("|").forEach((ln,k)=>
-        s.appendChild(txt(ln,{x:labW-14,y:mid-4+k*14,"text-anchor":"end",
-          class:k===0?"t-lab":"t-ax"})));
+        s.appendChild(txt(ln,mobile
+          ?{x:4,y:gy+11+k*15,class:k===0?"t-lab":"t-ax"}
+          :{x:labW-14,y:mid-4+k*14,"text-anchor":"end",class:k===0?"t-lab":"t-ax"})));
       series.forEach((se,si)=>{
-        const y=gy+si*(bh+bgap), v=se.v[gi];
+        const y=gy+(mobile?34:0)+si*(bh+bgap), v=se.v[gi];
         const w=Math.max(1.5,(v/max)*(x1-x0));
         const b=el("rect",{x:x0,y:y,width:w,height:bh,rx:1,fill:se.c,class:"bar-grow"});
         b.style.transitionDelay=(gi*0.07+si*0.035)+"s"; s.appendChild(b);
         s.appendChild(txt(fmt(v,1)+"%",{x:x0+w+8,y:y+bh-2.5,class:"t-val"}));
       });
       if(gi<groups.length-1)
-        s.appendChild(el("line",{x1:labW-4,y1:gy+rowH-ggap/2,x2:W-8,
+        s.appendChild(el("line",{x1:mobile?4:labW-4,y1:gy+rowH-ggap/2,x2:W-8,
           y2:gy+rowH-ggap/2,class:"grid-l"}));
     });
     host.appendChild(s);
@@ -996,14 +1015,20 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- lambda dots ---------- */
   function dots(id,rows){
     const host=document.getElementById(id); if(!host) return;
-    const W=760,H=250,padL=110,padR=40,top=26,bot=52,plotW=W-padL-padR,plotH=H-top-bot;
+    const W=chartW(host), mobile=W<520, H=mobile?280:250;
+    const padL=mobile?76:Math.min(110,W*.17),padR=mobile?24:40,top=26,bot=mobile?76:52,plotW=W-padL-padR,plotH=H-top-bot;
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     const x=v=>padL+(v/0.8)*plotW;
     [0,0.2,0.4,0.6,0.8].forEach(g=>{
       s.appendChild(el("line",{x1:x(g),y1:top-6,x2:x(g),y2:top+plotH+4,class:"grid-l"}));
       s.appendChild(txt(g.toFixed(1),{x:x(g),y:top+plotH+22,"text-anchor":"middle",class:"t-ax"}));
     });
-    s.appendChild(txt("λ: share of Congress's change kept in the next proposal (1.0 = all of it)",{x:padL,y:H-12,class:"t-ax"}));
+    if(mobile){
+      s.appendChild(txt("λ: share of Congress's change kept",{x:2,y:H-29,class:"t-ax"}));
+      s.appendChild(txt("in the next proposal (1.0 = all)",{x:2,y:H-12,class:"t-ax"}));
+    }else{
+      s.appendChild(txt("λ: share of Congress's change kept in the next proposal (1.0 = all of it)",{x:padL,y:H-12,class:"t-ax"}));
+    }
     rows.forEach((r,i)=>{
       const y=top+plotH*((i+0.5)/rows.length);
       s.appendChild(txt(r.l,{x:padL-16,y:y+4,"text-anchor":"end",class:"t-lab"}));
@@ -1019,6 +1044,9 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   }
 
   /* ===== data ===== */
+  const renderCharts=()=>{
+  document.querySelectorAll(".chart").forEach(c=>c.replaceChildren());
+  document.querySelectorAll(".legend--gen").forEach(l=>l.remove());
   unitGrid("cSc");
 
   hbars("c1",[
@@ -1110,6 +1138,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   cols("c8",[9.29,10.02,10.14,12.38,10.29,12.12,10.77,11.82,10.77].map((v,i)=>({
     l:D9[i],v:v,c:tone(i),d:2,hi:i%2===1})),
     {h:190,bw:40,top:44,deltas:[[1,0.73],[3,2.24],[5,1.83],[7,1.05]]});
+  };
+  renderCharts();
 
   /* ===== motion + chrome ===== */
   /* proximity snap: cards that fit are centred, taller cards snap top-edge */
@@ -1124,7 +1154,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
     root.dataset.snap=rm?"off":(!coarse && innerWidth>=900)?"on":"soft";
   };
   setSnap();
-  addEventListener("resize",()=>{clearTimeout(window.__st);window.__st=setTimeout(setSnap,160)},{passive:true});
+  addEventListener("resize",()=>{clearTimeout(window.__st);window.__st=setTimeout(()=>{renderCharts();setSnap();},180)},{passive:true});
   addEventListener("load",setSnap);
 
   const bar=document.querySelector(".prog i");
@@ -1198,7 +1228,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   },{threshold:[0,0.3,0.6]});
   secs.forEach(s=>io2.observe(s));
 
-  
+
 })();
 </script>
 </body>
