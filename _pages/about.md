@@ -31,6 +31,7 @@ Research interests
 * Macroeconomics
 * Development economics
 * Philippine economic history
+* Political economy
 
 Available for
 ------
