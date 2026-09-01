@@ -23,6 +23,7 @@
   --zero:#C4402F;
   --hold:#8A93A1;
   --shadow:0 26px 50px -34px rgba(16,35,58,.45);
+  --edge:rgba(16,35,58,.16);
   --serif:"Newsreader",Georgia,"Times New Roman",serif;
   --sans:"Public Sans","Helvetica Neue",Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
@@ -43,6 +44,7 @@
     --zero:#E06253;
     --hold:#6B7787;
     --shadow:0 26px 50px -34px rgba(0,0,0,.7);
+    --edge:rgba(0,0,0,.5);
   }
 }
 :root[data-theme="dark"]{
@@ -59,6 +61,7 @@
   --zero:#E06253;
   --hold:#6B7787;
   --shadow:0 26px 50px -34px rgba(0,0,0,.7);
+  --edge:rgba(0,0,0,.5);
 }
 
 *{box-sizing:border-box}
@@ -71,6 +74,7 @@ body{
   font-weight:300;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+  -webkit-text-size-adjust:100%;
   overflow-x:hidden;
 }
 svg{display:block}
@@ -113,7 +117,6 @@ svg{display:block}
   stroke-linecap:round;stroke-linejoin:round;
 }
 @media print{.step{display:none}}
-
 
 .wrap{width:min(var(--wrap),calc(100% - 44px));margin-inline:auto}
 
@@ -192,6 +195,7 @@ svg{display:block}
   padding:clamp(18px,3vw,34px) clamp(22px,4vw,52px) clamp(28px,4vw,52px);
   align-items:start;
 }
+.folio__grid>*{min-width:0}   /* let a wide chart scroll, not stretch its column */
 h2{
   font-family:var(--serif);font-weight:300;margin:14px 0 0;
   font-size:clamp(1.9rem,4.2vw,3.1rem);line-height:1.06;letter-spacing:-.012em;
@@ -211,19 +215,19 @@ h2 em{font-style:italic;color:var(--gaa)}
 }
 .stat dd{margin:0;font-size:.86rem;color:var(--muted);line-height:1.35}
 
-.chart{background:var(--panel-2);border:1px solid var(--rule-soft);border-radius:3px;padding:18px 16px 12px;overflow-x:auto}
-.chart svg{width:100%;height:auto;min-width:340px}
+.chart{background:var(--panel-2);border:1px solid var(--rule-soft);border-radius:3px;padding:18px 16px 12px;overflow:hidden}
+.chart svg{display:block;width:100%;max-width:100%;height:auto;min-width:0}
 .legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin:0 0 14px;padding:0 2px}
 .legend span{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .legend i{width:11px;height:11px;border-radius:1px;display:inline-block}
 .cap{margin:12px 2px 0;font-size:.78rem;line-height:1.45;color:var(--muted)}
 
 /* chart text */
-.t-lab{font-family:var(--sans);font-size:12.5px;font-weight:400;fill:var(--ink-2)}
-.t-val{font-family:var(--mono);font-size:11.5px;fill:var(--ink-2)}
+.t-lab{font-family:var(--sans);font-size:13.5px;font-weight:400;fill:var(--ink-2)}
+.t-val{font-family:var(--mono);font-size:12.5px;fill:var(--ink-2)}
 .t-val.hi{fill:var(--ink);font-weight:500}
-.t-ax{font-family:var(--mono);font-size:10.5px;fill:var(--muted);letter-spacing:.06em}
-.t-note{font-family:var(--sans);font-size:11.5px;fill:var(--muted);font-style:italic}
+.t-ax{font-family:var(--mono);font-size:11.5px;fill:var(--muted);letter-spacing:.06em}
+.t-note{font-family:var(--sans);font-size:12.5px;fill:var(--muted);font-style:italic}
 .grid-l{stroke:var(--rule-soft);stroke-width:1}
 .zero-l{stroke:var(--rule);stroke-width:1}
 
@@ -282,8 +286,98 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   .bar-grow{transform:scaleX(1)}
   .col-grow{transform:scaleY(1)}
 }
+/* ================= responsive tuning ================= */
+
+/* Charts redraw to the width of their container. Mobile spacing is tighter,
+   but the SVG never becomes wider than the card. */
+@media (max-width:760px){
+  .chart{padding:15px 12px 10px}
+  .t-lab{font-size:13px}
+  .t-val{font-size:11.5px}
+  .t-ax{font-size:10.5px;letter-spacing:.02em}
+  .t-note{font-size:11.5px}
+
+  /* the closing glossary was holding two columns inside 138px each */
+  .cols{grid-template-columns:1fr;gap:30px}
+
+  /* the hero ran past the fold on every phone tested */
+  .hero{padding:70px 0 48px}
+  .hero .byline{margin-top:18px}
+  .hero .dek{margin-top:16px;font-size:1.02rem;line-height:1.5}
+  .bigfig{font-size:clamp(3.6rem,20vw,5.6rem)}
+  .bigfig sup{font-size:.28em;vertical-align:.9em;display:inline-block;max-width:24ch;line-height:1.25;margin-left:.2em}
+  .hero .meta{margin-top:26px;gap:0 22px;font-size:.66rem}
+  .hero .meta span{padding:8px 0}
+  .cue{margin-top:26px}
+  .cue::after{height:26px;margin-top:8px}
+  .sec{padding:clamp(48px,7vh,80px) 0}
+  .wrap{width:calc(100% - 32px)}
+  .folio__head{padding:24px 20px 0}
+  .folio__grid{padding:16px 20px 26px}
+  .stat dt{white-space:normal}
+  .cap{font-size:.8rem;line-height:1.5}
+}
+
+/* thumbs need a larger target than a mouse pointer does. On a phone the two
+   stacked buttons sat over two lines of body text, so they go side by side and
+   translucent — half the footprint, and the text behind stays readable. */
+@media (pointer:coarse){
+  .step button{width:46px;height:46px}
+  .step svg{width:18px;height:18px}
+}
+@media (max-width:760px){
+  .step{
+    display:flex;flex-direction:row;gap:6px;right:12px;bottom:12px;
+    background:color-mix(in srgb,var(--panel) 82%,transparent);
+    border:1px solid var(--rule-soft);border-radius:5px;padding:5px;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  .step button{box-shadow:none;border-color:transparent;background:transparent}
+}
+
+/* very small phones: keep the headline from crowding the edge */
+@media (max-width:380px){
+  .hero h1{font-size:clamp(2.3rem,9vw,3rem)}
+  h2{font-size:clamp(1.6rem,6.4vw,2.1rem)}
+  .tag--src{font-size:.62rem}
+}
+
+/* large monitors: use a little more of the width for the charts */
+@media (min-width:1500px){
+  :root{--wrap:1340px}
+  .folio__grid{grid-template-columns:1.5fr .85fr}
+}
+
+/* short viewports: the hero was pushing its own scroll cue past the fold,
+   on laptops as well as phones */
+@media (min-width:761px) and (max-height:960px){
+  .hero{padding:72px 0 46px}
+  .bigfig{font-size:clamp(3.4rem,9vw,7rem)}
+  .hero .dek{margin-top:18px}
+  .hero .meta{margin-top:26px}
+  .cue{margin-top:26px}
+  .cue::after{height:28px}
+}
+@media (max-width:760px) and (max-height:820px){
+  .hero{padding:44px 0 26px}
+  .bigfig{font-size:clamp(2.9rem,15vw,4.2rem)}
+  .hero .dek{margin-top:12px;font-size:.98rem}
+  .hero .meta{margin-top:14px}
+  .cue{margin-top:12px}
+}
+@media (max-width:760px) and (max-height:900px){
+  .hero{padding:54px 0 34px}
+  .bigfig{font-size:clamp(3.2rem,17vw,4.8rem)}
+  .hero .dek{margin-top:14px}
+  .hero .meta{margin-top:18px}
+  .cue{margin-top:16px}
+  .cue::after{height:22px;margin-top:6px}
+}
+
 :focus-visible{outline:2px solid var(--gaa);outline-offset:3px}
 </style>
+
+
 
 <div class="prog" aria-hidden="true"><i></i></div>
 <div class="spine" aria-hidden="true"></div>
@@ -296,6 +390,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </button>
 </nav>
 
+
+
 <main>
 
 <header class="hero" id="s0">
@@ -303,9 +399,9 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
     <p class="topnav rev"><a href="/dashboards">← Dashboards</a></p>
     <p class="eyebrow rev">National expenditure program</p>
     <h1 class="rev">Proposed 2027 budget<div><em>The real score</em></div></h1>
-    <p class="byline rev">JC Punongbayan</p>
-    <p class="dek rev">Every August the President sends Congress a budget proposal, called the National Expenditure Program (NEP). Every December Congress sends back a law, the General Appropriations Act (GAA). What changes in between is where our budget is actually decided. This page measures it, using nine documents covering 2023 to 2027.</p>
-    <p class="bigfig rev" style="margin-top:44px">7,200.2<sup>PHP billion in total</sup></p>
+    <p class="byline rev">by JC Punongbayan</p>
+    <p class="dek rev">Every August, the President sends to Congress a budget proposal, called the National Expenditure Program (NEP). Every December, Congress sends back a law called the General Appropriations Act (GAA). What changes in between is where our budget is actually decided. This page measures it, using 9 documents covering 2023 to 2027.</p>
+    <p class="bigfig rev" style="margin-top:44px">7.2<sup>PHP trillion in total</sup></p>
     <div class="meta rev">
       <span>532,313 funded items</span>
       <span>103 top-level allocations</span>
@@ -319,9 +415,42 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">01 · Composition</span>
+        <span class="tag tag--num">01 · Scale</span>
+        <span class="tag tag--src">The 2027 proposal in full</span>
+        <h2>P7.2 trillion, drawn one billion at a time</h2>
+      </div>
+      <div class="folio__grid">
+        <div>
+          <div class="chart" id="cSc"></div>
+          <p class="cap">Every square is one billion pesos. There are 7,200 of them, and the proposal is P0.186 billion more than the grid can show. A million pesos, at this scale, is one thousandth of a single square.</p>
+        </div>
+        <div class="say">
+          <p class="lede">Written out in full, the 2027 proposal is P7,200,186,000,000.</p>
+          <p>That is 7,200,186 million pesos. Or 7,200 billion. Or 7.2 trillion, which is the number everyone quotes because the others are unreadable.</p>
+          <p>The grid draws each of those billions as one square. A million pesos would be a thousandth of one square, too small to print on any page.</p>
+          <p>Another way in. A million seconds is 11.6 days. A billion seconds is 31.7 years. Spend a peso every second and P7.2 trillion lasts about 228,000 years.</p>
+          <p>But scale cuts both ways. Split across the population, the whole national budget is roughly <strong>P63,000 per Filipino for the year</strong>, which is a little over P170 a day to cover schools, roads, hospitals, soldiers, and debt.</p>
+          <dl class="stat">
+            <div><dt>P63,235</dt><dd>The budget per Filipino for the year, against a 2025 population of 113.9 million</dd></div>
+            <div><dt>228,165</dt><dd>Years it would take to count it out at one peso a second</dd></div>
+          </dl>
+          <div class="caveat">
+            <h3>What a trillion means</h3>
+            <p>A trillion here is a million millions, the ordinary English-language sense and the one the Department of Budget and Management uses. Every peso figure on this page follows the same convention.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="s2">
+  <div class="wrap">
+    <article class="folio rev">
+      <div class="folio__head">
+        <span class="tag tag--num">02 · Composition</span>
         <span class="tag tag--src">The 2027 proposal</span>
-        <h2>Two fifths of the budget is spoken for before anyone deliberates</h2>
+        <h2>About two-fifths of the budget&nbsp;<div>can't be touched by Congress</div></h2>
       </div>
       <div class="folio__grid">
         <div>
@@ -330,8 +459,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p class="cap">The 13 biggest items in the 2027 proposal, out of 103. Each ordinary department is shown as a single total. The large automatic and lump-sum funds are broken into their parts.</p>
         </div>
         <div class="say">
-          <p class="lede">Local governments' share of national taxes and interest on the national debt come to P2,434 billion between them.</p>
-          <p>That is 33.8% of the entire proposal.</p>
+          <p class="lede">The budget may seem as large as ever, and it is. But in fact, about two-fifths of the proposal for 2027 can't be touched.&nbsp;<span style="font-size: 1.1rem;">Local governments' share of national taxes and interest on the national debt come to P2,434 billion between them.</span></p>
+          <p>That is already 33.8% of the entire proposal.</p>
           <p>Nobody sits down each year and decides those two amounts. One is a share of taxes collected three years earlier, fixed by law. The other is whatever we owe our lenders.</p>
           <p>Add the BARMM block grant (the yearly transfer to the Bangsamoro Autonomous Region in Muslim Mindanao), pensions, and the retirement premiums of government workers. About <strong>40% of the budget is spoken for before anyone chooses anything</strong>.</p>
           <p>But the fight is over what remains. Education and public works alone take 22.5% of the total.</p>
@@ -346,11 +475,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s2">
+<section class="sec" id="s3">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">02 · Size</span>
+        <span class="tag tag--num">03 · Size</span>
         <span class="tag tag--src">Budget against the economy, 2023–2027</span>
         <h2>The budget barely moves&nbsp;<div>as a share of the economy</div></h2>
       </div>
@@ -361,12 +490,12 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p class="cap">Total appropriations as a % of nominal gross domestic product. GDP for 2023 to 2025 is the actual outturn from the Philippine Statistics Authority. GDP for 2026 and 2027 is the low end of the range the government projected alongside the 2027 proposal, which is the basis it used for its own published 21.7% figure.</p>
         </div>
         <div class="say">
-          <p class="lede">A budget of P7.2 trillion sounds enormous. Set against the size of the economy, it is almost exactly what it was four years ago.</p>
-          <p>The budget has sat between 21.7% and 22.6% of gross domestic product (GDP), the value of everything the country produces in a year, in every year since 2023.</p>
+          <p class="lede">A budget of P7.2 trillion sounds enormous. But set against the size of the economy, it is almost exactly what it was four years ago.</p>
+          <p>The budget-GDP ratio has sat between 21.7% and 22.6% of gross domestic product (GDP) in every year since 2023.</p>
           <p>The peak is 2025, at 22.6%. That was not a spending surge. The budget grew 9.7% that year while the economy grew 5.9% in peso terms, so the same money became a larger slice of a smaller economy than anyone had planned for.</p>
-          <p><strong>But the last two bars rest on a forecast.</strong> The economy of 2026 and 2027 has not happened yet, so those two ratios use the government's own projections rather than a measurement.</p>
-          <p>Note that those projections have already missed once. For 2025 the government projected nominal GDP of P28,356 billion at the low end of its range. The outturn was P28,014 billion, short by P342 billion.</p>
-          <p>I flag this because the advertised 21.7% for 2027 assumes the economy grows 8.8% in peso terms. Miss by as much as 2025 missed, and the ratio is 22.0% instead.</p>
+          <p><strong>Te last two bars rest on a forecast of GDP growth.</strong>&nbsp;The problem is that we already missed growth targets in the past.&nbsp;</p>
+          <p>For 2025 the government projected nominal GDP of P28,356 billion at the low end of its range. The outturn was P28,014 billion, short by P342 billion.</p>
+          <p>The advertised 21.7% for 2027 assumes the economy grows 8.8% in peso terms. Miss by as much as 2025 missed, and the ratio is 22.0% instead.</p>
           <dl class="stat">
             <div><dt>21.7%</dt><dd>The 2027 proposal as a share of projected GDP, the same share as 2023</dd></div>
             <div><dt>P342B</dt><dd>How far the 2025 economy fell short of the government's own low projection</dd></div>
@@ -381,11 +510,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s3">
+<section class="sec" id="s4">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">03 · Measurement</span>
+        <span class="tag tag--num">04 · Measurement</span>
         <span class="tag tag--src">Proposal vs law, 2023–2026</span>
         <h2>Congress tends to modify the budget<div>at the level of programs, not agencies</div></h2>
       </div>
@@ -395,43 +524,14 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p class="cap">How much of the budget Congress moves. Read each bar this way: that share of every peso would have to change hands to turn the President's proposal into the law that was signed. The same question, asked at four levels of detail.</p>
         </div>
         <div class="say">
-          <p class="lede">Look only at department totals and Congress seems to move about 6% of the budget. Look at individual programs and it moves 16–23%.</p>
-          <p>But that gap is the point. Roughly three quarters of the money Congress moves stays inside the same department, taken from one of its programs and given to another.</p>
+          <p class="lede">Look only at department totals and Congress seems to move about 6% of the budget. Look at individual programs, however, and it moves 16–23%.</p>
+          <p>Put another way, roughly three quarters of the money Congress moves stays inside the same department, taken from one of its programs and given to another.</p>
           <p>Judge the budget by department totals and all of that is invisible.</p>
-          <p>Note that going finer still, down to individual funds and expense types, barely changes the answer.</p>
-          <p><strong>The real bargaining happens at the level of programs.</strong></p>
+          <p>Going finer still, down to individual funds and expense types, barely changes the answer.</p>
+          <p><strong>Implication: The real bargaining happens at the level of programs.</strong></p>
           <div class="caveat">
             <h3>Worth knowing</h3>
             <p>Congress cannot make the budget bigger. The Constitution caps it at the President's total. So everything here is money moved from one purpose to another, never money added.</p>
-          </div>
-        </div>
-      </div>
-    </article>
-  </div>
-</section>
-
-<section class="sec" id="s4">
-  <div class="wrap">
-    <article class="folio rev">
-      <div class="folio__head">
-        <span class="tag tag--num">04 · Persistence</span>
-        <span class="tag tag--src">Four years, four handovers</span>
-        <h2>The President tends to recycle<div>past budget proposals</div></h2>
-      </div>
-      <div class="folio__grid">
-        <div>
-          <div class="chart" id="c3"></div>
-          <p class="cap">Each dot is one year's survival rate, which I call lambda (λ). The grey line through it is the margin of error. A value of 1.0 would mean the President's next proposal fully accepts what Congress enacted. A value of 0 would mean he ignores it completely and starts again from his own earlier figure.</p>
-        </div>
-        <div class="say">
-          <p class="lede">Congress passes the budget. The President then writes next year's proposal. The question here is simple: how much of what Congress changed does he keep?</p>
-          <p><strong>The answer, every year, is between 30% and 50%.</strong> Raise a program by P10 billion and the next proposal typically keeps only P3 to P5 billion of that increase. The rest is quietly pulled back toward what the President asked for in the first place.</p>
-          <p>That survival rate is what lambda measures. Note that it is a share, not a peso amount, which is why it can be compared across four very different years.</p>
-          <p>But the mirror image matters just as much. The President's own previous request carries roughly twice the weight of the law that was actually signed.</p>
-          <p>Confidential funds at the Department of the Interior and Local Government (DILG) show it plainly. They were proposed at exactly P0.907 billion four years running, raised by Congress three times out of four, and proposed again unchanged each time.</p>
-          <div class="caveat">
-            <h3>What lambda misses</h3>
-            <p>This tracks whether the pesos survive, not whether the projects do. A program can keep the same funding level from one year to the next while the specific roads, schools, or beneficiaries inside it change entirely.</p>
           </div>
         </div>
       </div>
@@ -443,7 +543,36 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">05 · Reversion</span>
+        <span class="tag tag--num">05 · Persistence</span>
+        <span class="tag tag--src">Four years, four handovers</span>
+        <h2>The President tends to recycle<div>past budget proposals</div></h2>
+      </div>
+      <div class="folio__grid">
+        <div>
+          <div class="chart" id="c3"></div>
+          <p class="cap">Each dot is one year's survival rate, which I call lambda (λ). The grey line through it is the margin of error. A value of 1.0 would mean the President's next proposal fully accepts what Congress enacted. A value of 0 would mean he ignores it completely and starts again from his own earlier figure.</p>
+        </div>
+        <div class="say">
+          <p class="lede">Congress passes the budget. The President then writes next year's proposal. But how much of what Congress changed does he keep?</p>
+          <p><strong>The answer, every year, is between 30% and 50%.</strong> Raise a program by P10 billion and the next proposal typically keeps only P3 to P5 billion of that increase. The rest is quietly pulled back toward what the President asked for in the first place.</p>
+          <p>That "survival rate" is measured by lambda in the graph. It is a share, not a peso amount, which is why it can be compared across four very different years.</p>
+          <p>But the mirror image matters just as much. The President's own previous request carries roughly twice the weight of the law that was actually signed.</p>
+          <p>Confidential funds at the Department of the Interior and Local Government (DILG) show it plainly. They were proposed at exactly P0.907 billion 4 years running, raised by Congress three times out of four, and proposed again unchanged each time.</p>
+          <div class="caveat">
+            <h3>What lambda misses</h3>
+            <p>This tracks whether the pesos survive, not whether the projects do. A program can keep the same funding level from one year to the next while the specific roads, schools, or beneficiaries inside it change entirely.</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="s6">
+  <div class="wrap">
+    <article class="folio rev">
+      <div class="folio__head">
+        <span class="tag tag--num">06 · Reversion</span>
         <span class="tag tag--src">2026 proposal → 2026 law → 2027 proposal</span>
         <h2>What Congress added in 2026, the 2027 proposal takes back</h2>
       </div>
@@ -454,9 +583,9 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p class="cap">Change in funding, P billion. Where the two bars point in opposite directions, the President's next proposal is undoing what Congress did. Where they point the same way, it is going further. AICS is the Assistance to Individuals in Crisis Situations, AKAP the Ayuda sa Kapos ang Kita Program, TUPAD the labor department's emergency employment program, PAFF the Presidential Assistance to Farmers and Fisherfolk, and 4Ps the Pantawid Pamilyang Pilipino Program.</p>
         </div>
         <div class="say">
-          <p class="lede">Medical assistance goes P24.24 billion, then P51.65 billion, then P24.24 billion. Back to the centavo.</p>
-          <p>The same shape repeats across the assistance programs. Of the P500 billion Congress added across government, P283 billion is taken out again in the next proposal. Of what it cut, P306 billion is put back.</p>
-          <p><strong>But the local government support fund is the exception.</strong> Congress raised it by P41.8 billion and the President kept the higher figure. It is the only large fund on this list where what Congress enacted became the new starting point.</p>
+          <p class="lede">For example, DOH medical assistance goes P24.24 billion, then P51.65 billion, then P24.24 billion.</p>
+          <p>The same pattern repeats across the assistance programs. Of the P500 billion Congress added across government, P283 billion is taken out again in the next proposal. Of what it cut, P306 billion is put back.</p>
+          <p><strong>But the Local Government Support Fund (LGSF) is the exception.</strong> Congress raised it by P41.8 billion and the President kept the higher figure. It is the only large fund on this list where what Congress enacted became the new starting point.</p>
           <p>Note that a year earlier the same fund was raised and then pulled back down.</p>
           <p>So this is a change of behavior, not a rule.</p>
           <dl class="stat">
@@ -469,11 +598,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s6">
+<section class="sec" id="s7">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">06 · Ayuda</span>
+        <span class="tag tag--num">07 · Ayuda</span>
         <span class="tag tag--src">Cash and in-kind assistance, 2023–2027</span>
         <h2>Ayuda is proposed small and enacted large, four years running</h2>
       </div>
@@ -485,10 +614,10 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
         </div>
         <div class="say">
           <p class="lede">In every year we can compare, Congress enacted more ayuda than the President proposed. There is no exception.</p>
-          <p>The gap is not small. The enacted figure runs between 1.5 and 2.6 times the proposal.</p>
+          <p>The gap is by no means small. The enacted figure runs between 1.5 and 2.6 times the proposal.</p>
           <p>Congress added P31.8 billion in 2023, P92.6 billion in 2024, P53.5 billion in 2025, and P75.0 billion in 2026.</p>
           <p><strong>But 4Ps moves the other way.</strong> The Pantawid Pamilyang Pilipino Program (4Ps) is our largest cash transfer and the one with the tightest rules on who qualifies. In the 2025 law, Congress cut it from P114.2 billion to P64.2 billion.</p>
-          <p>Note where the missing P50 billion went. It reappears in the 2025 standby list, as purpose 23, at exactly P50,000,000,000. That money is released only if extra revenue turns up.</p>
+          <p>Note where the missing P50 billion went. It reappears in the 2025 standby list (aka "unprogrammed funds"), at exactly P50 billion. That money is released only if extra revenue turns up.</p>
           <p>So in one budget, Congress raised the assistance that officials hand out case by case, and made the rules-based transfer conditional on money that may never arrive.</p>
           <dl class="stat">
             <div><dt>2.6x</dt><dd>How much larger the enacted 2024 ayuda budget was than the proposal, the widest gap in the window</dd></div>
@@ -504,11 +633,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s7">
+<section class="sec" id="s8">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">07 · Local funds</span>
+        <span class="tag tag--num">08 · Local funds</span>
         <span class="tag tag--src">Transfers to local governments, 2023–2027</span>
         <h2>Significant jump in the Local<div>Government Support Fund</div></h2>
       </div>
@@ -523,7 +652,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p>The National Tax Allotment, the special shares of local governments in national taxes, and the BARMM block grant are identical in the proposal and in the law, in all four years.</p>
           <p>The fourth stream has no formula. The Local Government Support Fund (LGSF) is a lump sum, and it is the one that moves.</p>
           <p>In the 2026 budget it went from P16.1 billion proposed to P57.9 billion enacted. That is a rise of 260% in one passage through Congress.</p>
-          <p>But almost all of the increase sits in a single line inside it. Financial Assistance to Local Government Units, which carries no allocation rule at all, went from P5.0 billion to P37.5 billion. The Growth Equity Fund added another P10.3 billion.</p>
+          <p>But almost all of the increase sits in a single line inside it. Financial Assistance to Local Government Units (FALGU), which carries no allocation rule at all, went from P5.0 billion to P37.5 billion. The Growth Equity Fund (GEF) added another P10.3 billion.</p>
           <p>Note that the President kept the higher figure. The LGSF is proposed at P58.5 billion for 2027, with Financial Assistance to LGUs held at exactly P37.5 billion.</p>
           <dl class="stat">
             <div><dt>P0</dt><dd>Change Congress made to the three formula-based transfers, in any of the four years</dd></div>
@@ -539,13 +668,13 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s8">
+<section class="sec" id="s9">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">08 · Public works</span>
+        <span class="tag tag--num">09 · Public works</span>
         <span class="tag tag--src">Public works, 2023–2027</span>
-        <h2>Flood control held flat for&nbsp;<div>3 years, then fell 98%</div></h2>
+        <h2>Flood control held flat for&nbsp;<div>3 years, then fell 98% in 2026</div></h2>
       </div>
       <div class="folio__grid">
         <div>
@@ -554,7 +683,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
           <p class="cap">Flood control funding at the Department of Public Works and Highways (DPWH), in each of the nine budget documents from 2023 to 2027. P billion.</p>
         </div>
         <div class="say">
-          <p class="lede">P254.3 billion, then P249.8 billion, then P250.8 billion. Then P4.8 billion.</p>
+          <p class="lede">In 2026, there was a sharp drop in flood control after intense public scrutiny. The 2025 proposal was P254.3 billion, then Congress approved P249.8 billion, then in 2026 the proposal was P250.8 billion. But Congress only approved P4.8 billion.</p>
           <p>Three budgets in a row within P4.5 billion of each other, then a cut of 98%, then a partial return to P103.5 billion in the 2027 proposal.</p>
           <p>Whatever happened in the 2026 budget, it was not a gradual change of priorities.</p>
           <p>But the money did not stay in the department. The DPWH fell from P881.3 billion to P530.9 billion, while its local roads, bridges, and multipurpose halls rose by only P73 billion.</p>
@@ -569,11 +698,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s9">
+<section class="sec" id="s10">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">09 · Transport</span>
+        <span class="tag tag--num">10 · Transport</span>
         <span class="tag tag--src">Transport department, 2027 proposal</span>
         <h2>The transport budget is a&nbsp;<div>two-project railway budget</div></h2>
       </div>
@@ -585,7 +714,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
         <div class="say">
           <p class="lede">The North–South Commuter Railway and the Metro Manila Subway take P191.3 billion. That is 97% of all rail money and 64% of the entire Department of Transportation (DOTr).</p>
           <p>Everything else on rails, meaning the whole Light Rail Transit (LRT) and Metro Rail Transit (MRT) network plus the Philippine National Railways (PNR), comes to P6.3 billion between them.</p>
-          <p>Note that two thirds of the two mega-projects is borrowed money: P56.7 billion from the Asian Development Bank (ADB) and P67.7 billion from Japan.</p>
+          <p>Two-thirds of the two mega-projects is borrowed money: P56.7 billion from the Asian Development Bank (ADB) and P67.7 billion from Japan.</p>
           <p><strong>But seventeen rail projects sit at zero</strong>, among them the Mindanao Railway, PNR South Long Haul, MRT-4, and the LRT-2 extensions.</p>
           <p>Zero here means zero in the regular budget. Projects like these usually sit on the standby list instead, which is the next section.</p>
           <dl class="stat">
@@ -597,13 +726,13 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s10">
+<section class="sec" id="s11">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">10 · Standby authority</span>
+        <span class="tag tag--num">11 · Standby authority</span>
         <span class="tag tag--src">The standby list, 2023–2026</span>
-        <h2>Tempering of unprogrammed funds</h2>
+        <h2>Drop in unprogrammed funds</h2>
       </div>
       <div class="folio__grid">
         <div>
@@ -627,11 +756,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec" id="s11">
+<section class="sec" id="s12">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">11 · Discretion</span>
+        <span class="tag tag--num">12 · Discretion</span>
         <span class="tag tag--src">Confidential and intelligence funds</span>
         <h2>Confidential and intelligence&nbsp;<div>funds&nbsp;<span style="font-size: clamp(1.9rem, 4.2vw, 3.1rem); letter-spacing: -0.012em; text-wrap-mode: initial;">are still sticky</span></div></h2>
       </div>
@@ -657,16 +786,16 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   </div>
 </section>
 
-<section class="sec close" id="s12">
+<section class="sec close" id="s13">
   <div class="wrap">
     <article class="folio rev">
       <div class="folio__head">
-        <span class="tag tag--num">12 · Limits</span>
+        <span class="tag tag--num">13 · Limits</span>
         <h2>Where the numbers come from, and where they stop</h2>
       </div>
       <div class="folio__grid" style="grid-template-columns:1fr">
         <div class="say" style="max-width:78ch">
-          <p class="lede">Every budget figure on this page comes from the government's own documents. That means the President's proposal and the budget law as signed, for each year from 2023 to 2027, plus the separate volumes covering the standby list. The economy figures in section 02 come from the Philippine Statistics Authority for 2023 to 2025 and from the government's own projections for 2026 and 2027.</p>
+          <p class="lede">Every budget figure on this page comes from the government's own documents. That means the President's proposal and the budget law as signed, for each year from 2023 to 2027, plus the separate volumes covering the standby list. The economic statistics in section 2 come from the Philippine Statistics Authority for 2023 to 2025 and from the government's own projections for 2026 and 2027.</p>
           <div class="cols">
             <div>
               <h3>Three limits worth stating</h3>
@@ -682,14 +811,14 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
                 <li><strong>Proposal (NEP).</strong> The National Expenditure Program, or what the President asks Congress for, submitted every August.</li>
                 <li><strong>The law (GAA).</strong> The General Appropriations Act, or what Congress passes and the President signs, usually in December.</li>
                 <li><strong>Regular budget.</strong> Spending funded by revenue the government expects to have. Its total is capped at what the President proposed.</li>
-                <li><strong>Standby list.</strong> Spending approved in advance but released only if extra money turns up. No cap.</li>
+                <li><strong>Unprogrammed appropriations.</strong> Spending approved in advance but released only if extra money turns up. No cap.</li>
                 <li><strong>Lambda (λ).</strong> The share of a change made by Congress that survives into the President's next proposal.</li>
               </ul>
             </div>
           </div>
           <div class="sig">
             <span><a href="/dashboards">All dashboards</a></span>
-            <span>Prepared by JCP using Claude</span>
+            <span>Prepared by JC PUNONGBAYAN using Claude OPUS 5 and chatgpt 5.6</span>
             <span>Data: Department of Budget and Management, FY 2023 to 2027</span>
             <span>Amounts in billion pesos unless stated</span>
           </div>
@@ -708,22 +837,64 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   const el=(n,a={})=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);return e;};
   const txt=(s,a={})=>{const t=el("text",a);t.textContent=s;return t;};
   const fmt=(v,d=1)=>v.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+  const chartW=host=>{
+    const cs=getComputedStyle(host);
+    const w=host.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+    return Math.max(230,Math.floor(w));
+  };
+
+  /* ---------- unit grid: one square per billion ---------- */
+  function unitGrid(id,opt={}){
+    const host=document.getElementById(id); if(!host) return;
+    const W=chartW(host), mobile=W<520;
+    const cols=opt.cols||(mobile?60:120), rows=7200/cols;
+    const pitch=(W-(mobile?8:16))/cols;
+    const gap=Math.max(.7,pitch*.24), cell=Math.max(1.8,pitch-gap);
+    const top=36, left=(W-(cols*pitch-gap))/2;
+    const H=top+rows*pitch-gap+30;
+    const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
+    /* 7,200 squares as one path — one node instead of seven thousand */
+    let d="";
+    for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
+      if(r===0&&c===0) continue;
+      const x=(left+c*pitch).toFixed(2), y=(top+r*pitch).toFixed(2);
+      d+=`M${x} ${y}h${cell}v${cell}h-${cell}z`;
+    }
+    const g=el("g",{class:"col-grow"});
+    g.style.transformOrigin="bottom";
+    g.appendChild(el("path",{d:d,fill:GAA,opacity:.9}));
+    s.appendChild(g);
+    s.appendChild(el("rect",{x:left,y:top,width:cell,height:cell,fill:NEP}));
+    /* a ring, or the one orange square is impossible to find among 7,200 */
+    s.appendChild(el("rect",{x:left-3,y:top-3,width:cell+6,height:cell+6,rx:1,
+      fill:"none",stroke:"var(--nep)","stroke-width":1}));
+    s.appendChild(el("line",{x1:left+cell/2,y1:top-8,x2:left+cell/2,y2:top-16,
+      stroke:"var(--nep)","stroke-width":1}));
+    s.appendChild(txt("one square = P1 billion",{x:left,y:top-21,class:"t-val hi",fill:"var(--nep)"}));
+    s.appendChild(txt("7,200 squares · the whole 2027 proposal",{x:left,y:H-8,class:"t-ax"}));
+    host.appendChild(s);
+  }
 
   /* ---------- horizontal ranked bars ---------- */
   function hbars(id,rows,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const labW=opt.labW||168, valW=opt.valW||86, rh=opt.rh||27, gap=6, pad=8;
-    const W=760, H=pad*2+rows.length*rh;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?4:(opt.labW||Math.min(168,W*.27));
+    const valW=mobile?48:Math.min(86,W*.14), rh=mobile?44:(opt.rh||27), gap=mobile?18:6, pad=8;
+    const H=pad*2+rows.length*rh;
     const x0=labW, x1=W-valW, max=Math.max(...rows.map(r=>r.v));
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     rows.forEach((r,i)=>{
       const y=pad+i*rh, bh=rh-gap;
-      s.appendChild(txt(r.l,{x:labW-12,y:y+bh/2+4,"text-anchor":"end",class:"t-lab"}));
+      s.appendChild(txt(r.l,mobile
+        ?{x:x0,y:y+12,class:"t-lab"}
+        :{x:labW-12,y:y+bh/2+4,"text-anchor":"end",class:"t-lab"}));
+      const by=mobile?y+18:y;
       const w=Math.max(1,(r.v/max)*(x1-x0));
-      const b=el("rect",{x:x0,y:y,width:w,height:bh,rx:1,fill:r.c||GAA,class:"bar-grow"});
+      const b=el("rect",{x:x0,y:by,width:w,height:bh,rx:1,fill:r.c||GAA,class:"bar-grow"});
       b.style.transitionDelay=(i*0.045)+"s";
       s.appendChild(b);
-      s.appendChild(txt(fmt(r.v,r.d===undefined?1:r.d)+(r.sfx||""),{x:x0+w+9,y:y+bh/2+4,class:"t-val"+(r.hi?" hi":"")}));
+      s.appendChild(txt(fmt(r.v,r.d===undefined?1:r.d)+(r.sfx||""),{x:Math.min(W-2,x0+w+7),y:by+bh/2+4,class:"t-val"+(r.hi?" hi":""),"text-anchor":x0+w+46>W?"end":"start"}));
     });
     host.appendChild(s);
   }
@@ -731,18 +902,21 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- diverging paired bars ---------- */
   function dbars(id,rows){
     const host=document.getElementById(id); if(!host) return;
-    const labW=200, rh=44, pad=12, W=760;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?0:Math.min(200,W*.3), rh=mobile?68:44, pad=12;
     const H=pad*2+rows.length*rh;
-    const x0=labW, x1=W-56, mid=x0+(x1-x0)*0.42;
+    const x0=mobile?42:labW, x1=W-(mobile?42:56), mid=x0+(x1-x0)*(mobile?.5:.42);
     const max=Math.max(...rows.flatMap(r=>[Math.abs(r.a),Math.abs(r.b)]));
     const sc=v=>(v/max)*Math.min(mid-x0,x1-mid);
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     s.appendChild(el("line",{x1:mid,y1:pad-4,x2:mid,y2:H-pad+4,class:"zero-l"}));
     rows.forEach((r,i)=>{
       const y=pad+i*rh;
-      s.appendChild(txt(r.l,{x:labW-14,y:y+rh/2+1,"text-anchor":"end",class:"t-lab"}));
+      s.appendChild(txt(r.l,mobile
+        ?{x:2,y:y+12,class:"t-lab"}
+        :{x:labW-14,y:y+rh/2+1,"text-anchor":"end",class:"t-lab"}));
       [[r.a,GAA,-1],[r.b,NEP,1]].forEach(([v,c,k])=>{
-        const yy=y+rh/2+k*9-8, w=Math.abs(sc(v));
+        const yy=(mobile?y+35:y+rh/2)+k*9-8, w=Math.abs(sc(v));
         if(Math.abs(v)<0.02){
           s.appendChild(txt("no change",{x:mid+6,y:yy+11,class:"t-note"}));return;
         }
@@ -760,9 +934,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- columns ---------- */
   function cols(id,rows,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const W=760, plotH=opt.h||230, padL=8, padR=8, topPad=opt.top||34, botPad=opt.bot||46;
+    const W=chartW(host), mobile=W<520;
+    const plotH=opt.h||230, padL=2, padR=2;
+    const topPad=Math.max(opt.top||34,mobile?(opt.deltas?90:70):0), botPad=Math.max(opt.bot||46,mobile?80:0);
     const H=plotH+topPad+botPad;
-    const n=rows.length, step=(W-padL-padR)/n, bw=Math.min(opt.bw||46,step*0.6);
+    const n=rows.length, step=(W-padL-padR)/n, bw=Math.min(opt.bw||46,step*(mobile?.56:.6));
     const max=Math.max(...rows.map(r=>r.v))*1.02||1;
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     for(let g=0;g<=3;g++){
@@ -775,15 +951,31 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
         const b=el("rect",{x:cx-bw/2,y:y,width:bw,height:h,rx:1,fill:r.c||GAA,class:"col-grow"});
         b.style.transitionDelay=(i*0.05)+"s"; s.appendChild(b);
       }
-      s.appendChild(txt(r.v===0?"0":fmt(r.v,r.d===undefined?1:r.d),{x:cx,y:y-8,"text-anchor":"middle",class:"t-val"+(r.hi?" hi":"")}));
-      String(r.l).split("|").forEach((ln,k)=>
-        s.appendChild(txt(ln,{x:cx,y:topPad+plotH+18+k*13,"text-anchor":"middle",class:"t-ax"})));
-      if(r.note) s.appendChild(txt(r.note,{x:cx,y:topPad+plotH+46,"text-anchor":"middle",class:"t-note"}));
+      let valueY=y-8;
+      if(mobile&&i%2) valueY-=56;
+      s.appendChild(txt(r.v===0?"0":fmt(r.v,r.d===undefined?1:r.d),{x:cx,y:valueY,"text-anchor":"middle",class:"t-val"+(r.hi?" hi":"")}));
+      const parts=String(r.l).split("|");
+      if(!mobile){
+        parts.forEach((ln,k)=>s.appendChild(txt(ln,{x:cx,y:topPad+plotH+18+k*13,"text-anchor":"middle",class:"t-ax"})));
+      }
+      if(r.note){
+        const noteX=mobile&&i===n-1?W-2:cx;
+        s.appendChild(txt(r.note,{x:noteX,y:topPad+plotH+54+(mobile&&i%2?14:0),"text-anchor":mobile&&i===n-1?"end":"middle",class:"t-note"}));
+      }
     });
+    if(mobile){
+      const years=new Map();
+      rows.forEach((r,i)=>{
+        const year=String(r.l).split("|").find(p=>/^20\d\d$/.test(p));
+        if(year){const xs=years.get(year)||[];xs.push(padL+step*(i+.5));years.set(year,xs);}
+      });
+      years.forEach((xs,year)=>s.appendChild(txt(year,{x:xs.reduce((a,b)=>a+b,0)/xs.length,
+        y:topPad+plotH+22,"text-anchor":"middle",class:"t-ax"})));
+    }
     if(opt.deltas){
       opt.deltas.forEach(([i,v])=>{
         const cx=padL+step*(i+0.5)-step/2;
-        s.appendChild(txt("+"+fmt(v,2),{x:cx,y:20,"text-anchor":"middle",class:"t-val hi",fill:"var(--gaa)"}));
+        s.appendChild(txt("+"+fmt(v,mobile?1:2),{x:cx,y:mobile?12:20,"text-anchor":"middle",class:"t-val hi",fill:"var(--gaa)"}));
       });
     }
     host.appendChild(s);
@@ -792,7 +984,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- horizontal grouped bars ---------- */
   function hgrouped(id,groups,series,opt={}){
     const host=document.getElementById(id); if(!host) return;
-    const W=760, labW=opt.labW||168, valW=64, bh=13, bgap=5, ggap=24, top=6;
+    const W=chartW(host), mobile=W<520;
+    const labW=mobile?4:(opt.labW||Math.min(168,W*.27)), valW=mobile?40:64, bh=13, bgap=5, ggap=mobile?36:24, top=6;
     const rowH=series.length*(bh+bgap)+ggap;
     const H=top*2+groups.length*rowH;
     const x0=labW, x1=W-valW;
@@ -802,17 +995,18 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
       const gy=top+gi*rowH;
       const mid=gy+(series.length*(bh+bgap))/2;
       String(g).split("|").forEach((ln,k)=>
-        s.appendChild(txt(ln,{x:labW-14,y:mid-4+k*14,"text-anchor":"end",
-          class:k===0?"t-lab":"t-ax"})));
+        s.appendChild(txt(ln,mobile
+          ?{x:4,y:gy+11+k*15,class:k===0?"t-lab":"t-ax"}
+          :{x:labW-14,y:mid-4+k*14,"text-anchor":"end",class:k===0?"t-lab":"t-ax"})));
       series.forEach((se,si)=>{
-        const y=gy+si*(bh+bgap), v=se.v[gi];
+        const y=gy+(mobile?34:0)+si*(bh+bgap), v=se.v[gi];
         const w=Math.max(1.5,(v/max)*(x1-x0));
         const b=el("rect",{x:x0,y:y,width:w,height:bh,rx:1,fill:se.c,class:"bar-grow"});
         b.style.transitionDelay=(gi*0.07+si*0.035)+"s"; s.appendChild(b);
         s.appendChild(txt(fmt(v,1)+"%",{x:x0+w+8,y:y+bh-2.5,class:"t-val"}));
       });
       if(gi<groups.length-1)
-        s.appendChild(el("line",{x1:labW-4,y1:gy+rowH-ggap/2,x2:W-8,
+        s.appendChild(el("line",{x1:mobile?4:labW-4,y1:gy+rowH-ggap/2,x2:W-8,
           y2:gy+rowH-ggap/2,class:"grid-l"}));
     });
     host.appendChild(s);
@@ -821,14 +1015,20 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   /* ---------- lambda dots ---------- */
   function dots(id,rows){
     const host=document.getElementById(id); if(!host) return;
-    const W=760,H=250,padL=110,padR=40,top=26,bot=52,plotW=W-padL-padR,plotH=H-top-bot;
+    const W=chartW(host), mobile=W<520, H=mobile?280:250;
+    const padL=mobile?76:Math.min(110,W*.17),padR=mobile?24:40,top=26,bot=mobile?76:52,plotW=W-padL-padR,plotH=H-top-bot;
     const s=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img"});
     const x=v=>padL+(v/0.8)*plotW;
     [0,0.2,0.4,0.6,0.8].forEach(g=>{
       s.appendChild(el("line",{x1:x(g),y1:top-6,x2:x(g),y2:top+plotH+4,class:"grid-l"}));
       s.appendChild(txt(g.toFixed(1),{x:x(g),y:top+plotH+22,"text-anchor":"middle",class:"t-ax"}));
     });
-    s.appendChild(txt("λ: share of Congress's change kept in the next proposal (1.0 = all of it)",{x:padL,y:H-12,class:"t-ax"}));
+    if(mobile){
+      s.appendChild(txt("λ: share of Congress's change kept",{x:2,y:H-29,class:"t-ax"}));
+      s.appendChild(txt("in the next proposal (1.0 = all)",{x:2,y:H-12,class:"t-ax"}));
+    }else{
+      s.appendChild(txt("λ: share of Congress's change kept in the next proposal (1.0 = all of it)",{x:padL,y:H-12,class:"t-ax"}));
+    }
     rows.forEach((r,i)=>{
       const y=top+plotH*((i+0.5)/rows.length);
       s.appendChild(txt(r.l,{x:padL-16,y:y+4,"text-anchor":"end",class:"t-lab"}));
@@ -844,6 +1044,11 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   }
 
   /* ===== data ===== */
+  const renderCharts=()=>{
+  document.querySelectorAll(".chart").forEach(c=>c.replaceChildren());
+  document.querySelectorAll(".legend--gen").forEach(l=>l.remove());
+  unitGrid("cSc");
+
   hbars("c1",[
     {l:"National tax allotment",v:1319.8,c:HOLD,hi:1},
     {l:"Debt interest payments",v:1114.3,c:HOLD,hi:1},
@@ -933,6 +1138,8 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
   cols("c8",[9.29,10.02,10.14,12.38,10.29,12.12,10.77,11.82,10.77].map((v,i)=>({
     l:D9[i],v:v,c:tone(i),d:2,hi:i%2===1})),
     {h:190,bw:40,top:44,deltas:[[1,0.73],[3,2.24],[5,1.83],[7,1.05]]});
+  };
+  renderCharts();
 
   /* ===== motion + chrome ===== */
   /* proximity snap: cards that fit are centred, taller cards snap top-edge */
@@ -947,7 +1154,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
     root.dataset.snap=rm?"off":(!coarse && innerWidth>=900)?"on":"soft";
   };
   setSnap();
-  addEventListener("resize",()=>{clearTimeout(window.__st);window.__st=setTimeout(setSnap,160)},{passive:true});
+  addEventListener("resize",()=>{clearTimeout(window.__st);window.__st=setTimeout(()=>{renderCharts();setSnap();},180)},{passive:true});
   addEventListener("load",setSnap);
 
   const bar=document.querySelector(".prog i");
@@ -1020,6 +1227,7 @@ html:is([data-snap="on"],[data-snap="soft"]) .folio[data-fit="0"]{
     });
   },{threshold:[0,0.3,0.6]});
   secs.forEach(s=>io2.observe(s));
+
 
 })();
 </script>
