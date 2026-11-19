@@ -22,4 +22,3 @@ Undergraduate
 * Econ 138 (Special Topics in Econometrics: Causal Inference in Economics)
 * Econ 199 (Undergraduate Seminar)
 * Econ 191 (Development Economics; as senior lecturer)
-* Econ 201 (Advanced Macroeconomics I)
