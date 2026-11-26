@@ -11,21 +11,111 @@ author_profile: true
 
 {% include base_path %}
 
-<!-- New style rendering if publication categories are defined -->
 {% if site.publication_category %}
-  {% for category in site.publication_category  %}
-    {% assign title_shown = false %}
-    {% for post in site.publications reversed %}
-      {% if post.category != category[0] %}
-        {% continue %}
+  <div id="publication-tabs">
+    <div class="publication-tab-list" hidden></div>
+    {% for category in site.publication_category %}
+      {% assign publications = site.publications | where: "category", category[0] %}
+      {% if publications != empty %}
+        <section id="publications-{{ category[0] | slugify }}" class="publication-panel">
+          <h2>{{ category[1].title }}</h2><hr />
+          {% for post in publications reversed %}
+            {% include archive-single.html %}
+          {% endfor %}
+        </section>
       {% endif %}
-      {% unless title_shown %}
-        <h2>{{ category[1].title }}</h2><hr />
-        {% assign title_shown = true %}
-      {% endunless %}
-      {% include archive-single.html %}
     {% endfor %}
-  {% endfor %}
+  </div>
+
+  <style>
+    .publication-tab-list:not([hidden]) {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .25rem .75rem;
+      margin-top: 1rem;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .publication-tab-list button {
+      padding: .45rem .55rem;
+      border: 0;
+      border-bottom: .2rem solid transparent;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .publication-tab-list button[aria-selected="true"] {
+      border-bottom-color: currentColor;
+      font-weight: bold;
+    }
+  </style>
+
+  <script>
+    (() => {
+      const container = document.getElementById('publication-tabs');
+      const list = container.querySelector('.publication-tab-list');
+      const panels = Array.from(container.querySelectorAll('.publication-panel'));
+
+      if (panels.length < 2) return;
+
+      list.setAttribute('role', 'tablist');
+      list.setAttribute('aria-label', 'Publication categories');
+
+      const tabs = panels.map((panel) => {
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.id = panel.id + '-tab';
+        tab.textContent = panel.querySelector('h2').textContent;
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-controls', panel.id);
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', tab.id);
+        panel.tabIndex = 0;
+        list.appendChild(tab);
+        return tab;
+      });
+
+      function selectTab(index) {
+        tabs.forEach((tab, i) => {
+          const selected = i === index;
+          tab.setAttribute('aria-selected', String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          panels[i].hidden = !selected;
+        });
+      }
+
+      tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => selectTab(index));
+        tab.addEventListener('keydown', (event) => {
+          let next;
+          switch (event.key) {
+            case 'ArrowLeft':
+              next = (index + tabs.length - 1) % tabs.length;
+              break;
+            case 'ArrowRight':
+              next = (index + 1) % tabs.length;
+              break;
+            case 'Home':
+              next = 0;
+              break;
+            case 'End':
+              next = tabs.length - 1;
+              break;
+            default:
+              return;
+          }
+          event.preventDefault();
+          selectTab(next);
+          tabs[next].focus();
+        });
+      });
+
+      selectTab(0);
+      list.hidden = false;
+    })();
+  </script>
 {% else %}
   {% for post in site.publications reversed %}
     {% include archive-single.html %}
